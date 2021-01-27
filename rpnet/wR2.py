@@ -182,7 +182,7 @@ lrScheduler = lr_scheduler.StepLR(optimizer_conv, step_size=5, gamma=0.1)
 
 # dst = LocDataLoader([args["images"]], imgSize)
 dst = ChaLocDataLoader(args["images"].split(','), imgSize)
-trainloader = DataLoader(dst, batch_size=batchSize, shuffle=True, num_workers=4)
+trainloader = DataLoader(dst, batch_size=batchSize, shuffle=True, num_workers=4 * 2)
 
 
 def train_model(model, criterion, optimizer, num_epochs=25):
@@ -190,7 +190,6 @@ def train_model(model, criterion, optimizer, num_epochs=25):
     for epoch in range(epoch_start, num_epochs):
         lossAver = []
         model.train(True)
-        lrScheduler.step()
         start = time()
 
         for i, (XI, YI) in enumerate(trainloader):
@@ -210,7 +209,7 @@ def train_model(model, criterion, optimizer, num_epochs=25):
             if len(y_pred) == batchSize:
                 loss += 0.8 * nn.L1Loss().cuda()(y_pred[:][:2], y[:][:2])
                 loss += 0.2 * nn.L1Loss().cuda()(y_pred[:][2:], y[:][2:])
-                lossAver.append(loss.data[0])
+                lossAver.append(loss.item())
 
                 # Zero gradients, perform a backward pass, and update the weights.
                 optimizer.zero_grad()
@@ -220,6 +219,7 @@ def train_model(model, criterion, optimizer, num_epochs=25):
             if i % 50 == 1:
                 with open(args['writeFile'], 'a') as outF:
                     outF.write('train %s images, use %s seconds, loss %s\n' % (i*batchSize, time() - start, sum(lossAver[-50:]) / len(lossAver[-50:])))
+        lrScheduler.step()
         print ('%s %s %s\n' % (epoch, sum(lossAver) / len(lossAver), time()-start))
         with open(args['writeFile'], 'a') as outF:
             outF.write('Epoch: %s %s %s\n' % (epoch, sum(lossAver) / len(lossAver), time()-start))

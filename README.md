@@ -1,12 +1,21 @@
 # CCPD (Chinese City Parking Dataset, ECCV)
 
-## UPdate on 10/03/2019. CCPD Dataset is now updated. We are confident that images in subsets of CCPD is much more challenging than before with over 300k images and refined annotations. 
+## UPdate on 10/03/2019. CCPD Dataset is now updated. We are confident that images in subsets of CCPD is much more challenging than before with over 300k images and refined annotations.
 
-(If you are benefited from this dataset, please cite our paper.) 
+(If you are benefited from this dataset, please cite our paper.)
 It can be downloaded from and extract by (tar xf CCPD2019.tar.xz):
- - [Google Drive](https://drive.google.com/open?id=1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc) 
- 
+ - [Google Drive](https://drive.google.com/open?id=1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc)
+
  - [BaiduYun Drive(code: hm0u)](https://pan.baidu.com/s/1i5AOjAbtkwb17Zy-NQGqkw)
+
+
+## Known Issues
+[unreproducible](https://github.com/detectRecog/CCPD/issues/69)
+|source|base |blur |challenge|db   |fn   |rotate|tilt |weather|
+|------|-----|-----|---------|-----|-----|------|-----|-------|
+|paper |98.5 |     |85.1     |96.9 |94.3 |90.8  |92.5 |87.9   |       
+|issue |98.04|22.74|33.75    |31.92|27.82|56.86 |47.53|95.25  |
+|me    |97   |24.12|31.51    |32   |24.22|51.92 |42.51|94.44  |
 
 
 #### train\val\test split
@@ -16,15 +25,15 @@ Images in CCPD-Base is split to train/val set. Sub-datasets (CCPD-DB, CCPD-Blur,
 ****
 ## UPdate on 16/09/2020. We add a new energy vehicle sub-dataset (CCPD-Green) which has an eight-digit license plate number.
 
-It can be downloaded from: 
- - [Google Drive](https://drive.google.com/file/d/1m8w1kFxnCEiqz_-t2vTcgrgqNIv986PR/view?usp=sharing) 
- 
+It can be downloaded from:
+ - [Google Drive](https://drive.google.com/file/d/1m8w1kFxnCEiqz_-t2vTcgrgqNIv986PR/view?usp=sharing)
+
  - [BaiduYun Drive(code: ol3j)](https://pan.baidu.com/s/1JSpc9BZXFlPkXxRK4qUCyw)
-  
+
 ### metric
 As each image in CCPD contains only a single license plate (LP). Therefore, we do not consider recall and concerntrate on precision. Detectors are allowed to predict only one bounding box for each image.
 
-- Detection. For each image, the detector outputs only one bounding box. The bounding box is considered to be correct if and only if its IoU with the ground truth bounding box is more than 70% (IoU > 0.7). Also, we compute AP on the test set. 
+- Detection. For each image, the detector outputs only one bounding box. The bounding box is considered to be correct if and only if its IoU with the ground truth bounding box is more than 70% (IoU > 0.7). Also, we compute AP on the test set.
 
 - Recognition. A LP recognition is correct if and only if all characters in the LP number are correctly recognized.
 
@@ -40,7 +49,7 @@ If you want to provide more baseline results or have problems about the provided
 |    SSD512   |  12 | 87.83 | 69.99 | 84.23 | 80.65 |  96.50 | 91.26 |   92.14   |
 |  YOLOv3-320 |  52 | 87.23 | 71.34 | 82.19 | 82.44 |  96.69 | 89.17 |   91.46   |
 
-##### recognition 
+##### recognition
 We provide baseline methods for recognition by appending a LP recognition model Holistic-CNN (HC) (refer to paper 'Holistic recognition of low quality license plates by cnn using track annotated data') to the detector.
 
 |             | FPS |   AP  |   DB  |  Blur |   FN  | Rotate |  Tilt | Challenge |
@@ -80,7 +89,7 @@ Demo code and several images are provided under rpnet/ folder, after you obtain 
 
 ```
 
-### The nearly well-trained model for testing and fun (Short of time, trained only for 5 epochs, but enough for testing): 
+### The nearly well-trained model for testing and fun (Short of time, trained only for 5 epochs, but enough for testing):
 
 We encourage the comparison with SOTA detector like FCOS rather than RPnet as the architecture of RPnet is very old fashioned.
 - Location module wR2.pth [google_drive](https://drive.google.com/open?id=1l_tIt7D3vmYNYZLOPbwx8qJpPVM82CP-), [baiduyun](https://pan.baidu.com/s/1Q3fPDHFYV5uibWwIQxPEOw)
@@ -90,9 +99,9 @@ We encourage the comparison with SOTA detector like FCOS rather than RPnet as th
 
 Input parameters are well commented in python codes(python2/3 are both ok, the version of pytorch should be >= 0.3). You can increase the batchSize as long as enough GPU memory is available.
 
-#### Enviorment (not so important as long as you can run the code): 
+#### Enviorment (not so important as long as you can run the code):
 
-- python: pytorch(0.3.1), numpy(1.14.3), cv2(2.4.9.1). 
+- python: pytorch(0.3.1), numpy(1.14.3), cv2(2.4.9.1).
 - system: Cuda(release 9.1, V9.1.85)
 
 #### For convinence, we provide a trained wR2 model and a trained rpnet model, you can download them from google drive or baiduyun.
@@ -119,7 +128,7 @@ After wR2 finetunes, we train the RPnet (we provide one as before, you can downl
 
 ## Test instructions
 
-After fine-tuning RPnet, you need to uncompress a zip folder and select it as the test directory. The argument after -s is a folder for storing failure cases. 
+After fine-tuning RPnet, you need to uncompress a zip folder and select it as the test directory. The argument after -s is a folder for storing failure cases.
 
 ```
 
